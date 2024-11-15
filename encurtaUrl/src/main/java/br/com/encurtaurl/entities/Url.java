@@ -1,7 +1,10 @@
 package br.com.encurtaurl.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
@@ -16,7 +19,11 @@ public class Url {
     @Column(nullable = false , length = 8)
     private String tinyUrl;
 
+    @CreationTimestamp
+    private Instant createdAt;
 
+    @UpdateTimestamp
+    private Instant updatedAt;
     public Url() {
     }
 
@@ -48,6 +55,14 @@ public class Url {
 
     public void setTinyUrl(String tinyUrl) {
         this.tinyUrl = tinyUrl;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
     }
 
     @Override
