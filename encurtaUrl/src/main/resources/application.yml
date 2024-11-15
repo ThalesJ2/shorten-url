@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: encurtaUrl
+
+  main:
+    banner-mode: off
+
+  profiles:
+    active: test
