@@ -7,6 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+
 @Service
 public class UrlService {
 
@@ -26,6 +30,8 @@ public class UrlService {
     @Transactional
     public Url create(Url url) {
         url.setTinyUrl(generateTinyUrl());
+        if(url.getExpiration() != null)
+            url.setExpiration(convertToUtc(url.getExpiration()));
         return urlRepository.save(url);
     }
 
@@ -36,5 +42,11 @@ public class UrlService {
             tinyUrl.append(BASE_64.charAt((int)(Math.random() * BASE_64.length())));
         }
         return tinyUrl.toString();
+    }
+
+    LocalDateTime convertToUtc(LocalDateTime localDateTime){
+        return localDateTime.atZone(ZoneId.systemDefault())
+                .withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+
     }
 }
