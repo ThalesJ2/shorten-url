@@ -1,7 +1,9 @@
 package br.com.encurtaurl.services;
 
+import br.com.encurtaurl.dtos.UrlDTO;
 import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.exceptions.ResourceNotFoundException;
+import br.com.encurtaurl.projections.UrlProjection;
 import br.com.encurtaurl.repositories.UrlRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,19 +21,27 @@ public class UrlService {
     @Autowired
     private UrlRepository urlRepository;
 
+    @Autowired
+    private IpInfoService ipInfoService;
+
 
     @Transactional(readOnly = true)
-    public Url findByTinyUrl(String tinyUrl) {
-        return urlRepository.findByTinyUrl(tinyUrl).orElseThrow(()
-                -> new ResourceNotFoundException("tinyUrl not found"));
+    public UrlDTO findByTinyUrl(String tinyUrl) {
+        UrlProjection projection = urlRepository.getUrlBy(tinyUrl).orElseThrow(()-> new ResourceNotFoundException("url not found"));
+        return new UrlDTO(projection);
     }
 
 
     @Transactional
     public Url create(Url url) {
+        System.out.println(ipInfoService.getAddressByIp("2.22.51.255"));
         url.setTinyUrl(generateTinyUrl());
+        System.out.println(convertToUtc(url.getExpiration()));
+        LocalDateTime now = convertToUtc(url.getExpiration());
         if(url.getExpiration() != null)
-            url.setExpiration(convertToUtc(url.getExpiration()));
+            url.setExpiration(now);
+
+
         return urlRepository.save(url);
     }
 
