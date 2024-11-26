@@ -1,6 +1,7 @@
 package br.com.encurtaurl.services;
 
 import br.com.encurtaurl.dtos.UrlDTO;
+import br.com.encurtaurl.entities.Address;
 import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.exceptions.ResourceNotFoundException;
 import br.com.encurtaurl.projections.UrlProjection;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @Service
 public class UrlService {
@@ -34,13 +36,13 @@ public class UrlService {
 
     @Transactional
     public Url create(Url url) {
-        System.out.println(ipInfoService.getAddressByIp("2.22.51.255"));
+        Address address = ipInfoService.getAddressByIp("2.22.51.255");
         url.setTinyUrl(generateTinyUrl());
-        System.out.println(convertToUtc(url.getExpiration()));
-        LocalDateTime now = convertToUtc(url.getExpiration());
         if(url.getExpiration() != null)
-            url.setExpiration(now);
-
+        {
+            LocalDateTime converted = convertToUtc(url.getExpiration(),address.getTimezone());
+            url.setExpiration(converted);
+        }
 
         return urlRepository.save(url);
     }
@@ -54,9 +56,9 @@ public class UrlService {
         return tinyUrl.toString();
     }
 
-    LocalDateTime convertToUtc(LocalDateTime localDateTime){
-        return localDateTime.atZone(ZoneId.systemDefault())
-                .withZoneSameInstant(ZoneOffset.UTC).toLocalDateTime();
+    LocalDateTime convertToUtc(LocalDateTime localDateTime, String timezone){
+            ZonedDateTime zoneSystem = localDateTime.atZone(ZoneId.of(timezone));
+         return zoneSystem.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 
     }
 }

@@ -1,13 +1,14 @@
 package br.com.encurtaurl.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.TimeZone;
+
 
 @Entity
 public class Url {
@@ -20,7 +21,7 @@ public class Url {
 
     @Column(nullable = false , length = 8)
     private String tinyUrl;
-    //SELECT ID,EXPIRATION,TINY_URL,ORIGINAL_URL,GetDate() AS 'date_now'  FROM URL  where EXPIRATION >= '2024-11-16 11:00:00' or  EXPIRATION IS NULL;
+
     @CreationTimestamp
     @Column(columnDefinition = "TIME WITH TIME ZONE")
     private Instant createdAt;
@@ -29,7 +30,8 @@ public class Url {
     @Column(columnDefinition = "TIME WITH TIME ZONE")
     private Instant updatedAt;
 
-   @Column(columnDefinition = "TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP")
+    @Future
     private LocalDateTime expiration;
 
     public Url() {
