@@ -1,7 +1,8 @@
 package br.com.encurtaurl.entities;
 
+import br.com.encurtaurl.dtos.RequestUrlDTO;
+import br.com.encurtaurl.dtos.UrlProjectionDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 
 
 @Entity
+
 public class Url {
 
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +33,11 @@ public class Url {
     private Instant updatedAt;
 
     @Column(columnDefinition = "TIMESTAMP")
-    @Future
     private LocalDateTime expiration;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Url() {
     }
@@ -42,6 +47,18 @@ public class Url {
         this.originalUrl = originalUrl;
         this.tinyUrl = tinyUrl;
 
+    }
+
+    public Url(UrlProjectionDTO dto){
+        originalUrl = dto.originalUrl();
+        tinyUrl = dto.tinyUrl();
+        expiration = dto.expiration();
+    }
+    public Url(RequestUrlDTO dto){
+        originalUrl = dto.originalUrl();
+        tinyUrl = dto.tinyUrl();
+        expiration = dto.expiration();
+        //user.setId(dto.userId());
     }
 
     public Long getId() {
@@ -72,6 +89,11 @@ public class Url {
         return createdAt;
     }
 
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Instant getUpdatedAt() {
         return updatedAt;
     }
@@ -96,4 +118,6 @@ public class Url {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+
 }

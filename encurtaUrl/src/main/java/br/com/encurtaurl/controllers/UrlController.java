@@ -1,15 +1,15 @@
 package br.com.encurtaurl.controllers;
 
-import br.com.encurtaurl.dtos.UrlDTO;
+import br.com.encurtaurl.dtos.RequestUrlDTO;
+import br.com.encurtaurl.dtos.UrlProjectionDTO;
 import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.services.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/urls")
@@ -19,14 +19,15 @@ public class UrlController {
     private UrlService urlService;
 
     @PostMapping
-    public ResponseEntity<Url> create(@RequestBody Url url , HttpServletRequest request) {
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<RequestUrlDTO> create(@RequestBody RequestUrlDTO dto , HttpServletRequest request) {
         System.out.println(request.getHeader("X-Forwarded-For"));
-        return ResponseEntity.status(HttpStatus.CREATED).body(urlService.create(url));
+        return ResponseEntity.status(HttpStatus.CREATED).body(urlService.create(dto));
     }
 
     @GetMapping("/{tinyUrl}")
     public ResponseEntity<Void> redirect(@PathVariable String tinyUrl) {
-        UrlDTO url = urlService.findByTinyUrl(tinyUrl);
+        UrlProjectionDTO url = urlService.findByTinyUrl(tinyUrl);
         return ResponseEntity.status(HttpStatus.SEE_OTHER).header("Location", url.originalUrl()).build();
     }
 }

@@ -1,6 +1,7 @@
 package br.com.encurtaurl.services;
 
-import br.com.encurtaurl.dtos.UrlDTO;
+import br.com.encurtaurl.dtos.RequestUrlDTO;
+import br.com.encurtaurl.dtos.UrlProjectionDTO;
 import br.com.encurtaurl.entities.Address;
 import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.exceptions.ResourceNotFoundException;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 @Service
@@ -28,25 +28,26 @@ public class UrlService {
 
 
     @Transactional(readOnly = true)
-    public UrlDTO findByTinyUrl(String tinyUrl) {
+    public UrlProjectionDTO findByTinyUrl(String tinyUrl) {
         UrlProjection projection = urlRepository.getUrlBy(tinyUrl).orElseThrow(()-> new ResourceNotFoundException("url not found"));
-        return new UrlDTO(projection);
+        return new UrlProjectionDTO(projection);
     }
 
 
     @Transactional
-    public Url create(Url url) {
+    public RequestUrlDTO create(RequestUrlDTO dto) {
         Address address = ipInfoService.getAddressByIp("2.22.51.255");
+        Url url = new Url(dto);
         url.setTinyUrl(generateTinyUrl());
         if(url.getExpiration() != null)
         {
             LocalDateTime converted = convertToUtc(url.getExpiration(),address.getTimezone());
             url.setExpiration(converted);
         }
+        url = urlRepository.save(url);
 
-        return urlRepository.save(url);
+        return new RequestUrlDTO(url);
     }
-
 
     String generateTinyUrl(){
         StringBuilder tinyUrl = new StringBuilder();

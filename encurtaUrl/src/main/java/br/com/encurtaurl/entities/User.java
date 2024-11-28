@@ -2,8 +2,7 @@ package br.com.encurtaurl.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -21,6 +20,9 @@ public class User {
       joinColumns = @JoinColumn(name = "user_id" , referencedColumnName = "id"),
      inverseJoinColumns = @JoinColumn(name = "role_id" , referencedColumnName = "id"))
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL)
+    private Set<Url> urls = new HashSet<>();
 
     public User() {
     }
@@ -55,8 +57,20 @@ public class User {
         return roles;
     }
 
+    public Set<Url> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(Set<Url> urls) {
+        this.urls = urls;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public  void addUrl(Url url){
+        urls.add(url);
     }
 
     @Override
@@ -71,4 +85,6 @@ public class User {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+
 }
