@@ -6,6 +6,7 @@ import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.entities.User;
 import br.com.encurtaurl.exceptions.ResourceNotFoundException;
 import br.com.encurtaurl.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +26,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public UserCreateUrlDTO createShortUrl(RequestUrlDTO dto) {
+    public UserCreateUrlDTO createShortUrl(RequestUrlDTO dto , HttpServletRequest request) {
         User user = userRepository.findById(dto.userId()).orElseThrow(()
                 -> new ResourceNotFoundException("not found"));
         Url url = new Url(dto);
         url.setUser(user);
-        dto = urlService.create(dto);
+        dto = urlService.create(dto,request);
         url.setTinyUrl(dto.tinyUrl());
         user.addUrl(url);
         user = userRepository.save(user);

@@ -5,6 +5,7 @@ import br.com.encurtaurl.dtos.UserCreateUrlDTO;
 import br.com.encurtaurl.entities.User;
 import br.com.encurtaurl.services.UrlService;
 import br.com.encurtaurl.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/urls")
-    public ResponseEntity<UserCreateUrlDTO> createShortUrl(@RequestBody RequestUrlDTO urlDTO){
-        return ResponseEntity.ok(userService.createShortUrl(urlDTO));
+    public ResponseEntity<UserCreateUrlDTO> createShortUrl(@RequestBody RequestUrlDTO urlDTO, HttpServletRequest request){
+        return ResponseEntity.ok(userService.createShortUrl(urlDTO,request));
     }
 }

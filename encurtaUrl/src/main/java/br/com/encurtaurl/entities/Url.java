@@ -58,7 +58,6 @@ public class Url {
         originalUrl = dto.originalUrl();
         tinyUrl = dto.tinyUrl();
         expiration = dto.expiration();
-        //user.setId(dto.userId());
     }
 
     public Long getId() {

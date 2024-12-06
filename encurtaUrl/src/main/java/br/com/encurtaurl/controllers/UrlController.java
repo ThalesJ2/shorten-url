@@ -21,13 +21,12 @@ public class UrlController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<RequestUrlDTO> create(@RequestBody RequestUrlDTO dto , HttpServletRequest request) {
-        System.out.println(request.getHeader("X-Forwarded-For"));
-        return ResponseEntity.status(HttpStatus.CREATED).body(urlService.create(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(urlService.create(dto,request));
     }
 
     @GetMapping("/{tinyUrl}")
-    public ResponseEntity<Void> redirect(@PathVariable String tinyUrl) {
-        UrlProjectionDTO url = urlService.findByTinyUrl(tinyUrl);
+    public ResponseEntity<Void> redirect(@PathVariable String tinyUrl, HttpServletRequest request) {
+        UrlProjectionDTO url = urlService.findByTinyUrl(tinyUrl,request);
         return ResponseEntity.status(HttpStatus.SEE_OTHER).header("Location", url.originalUrl()).build();
     }
 }
