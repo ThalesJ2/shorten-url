@@ -34,13 +34,23 @@ public class UrlService {
 
     @Transactional
     public UrlProjectionDTO findByTinyUrl(String tinyUrl,HttpServletRequest request) {
-        UrlProjection projection = urlRepository.getUrlBy(tinyUrl).orElseThrow(()-> new ResourceNotFoundException("url not found"));
+        UrlProjection projection = urlRepository.getUrlBy(tinyUrl).orElseThrow(()
+                -> new ResourceNotFoundException("url not found"));
         String ip = getIp(request);
         Metric metric =  ipInfoService.getAddressByIp(ip);
         long clicks = metricRepository.count()+1;
         metric.setClick(clicks);
+        Url url = urlRepository.findById(projection.getId()).orElseThrow(()
+                -> new ResourceNotFoundException("url not found"));
+        metric.setUrl(url);
         metric  = metricRepository.save(metric);
         return new UrlProjectionDTO(projection);
+    }
+
+    @Transactional
+    public Url analytics(String tinyUrl){
+        Url url = urlRepository.findByTinyUrl(tinyUrl).orElseThrow(()-> new ResourceNotFoundException("url not found"));
+        return url;
     }
 
 
@@ -55,7 +65,6 @@ public class UrlService {
             LocalDateTime converted = convertToUtc(url.getExpiration(),metric.getTimezone());
             url.setExpiration(converted);
         }
-        System.out.println();
         url = urlRepository.save(url);
         return new RequestUrlDTO(url);
     }

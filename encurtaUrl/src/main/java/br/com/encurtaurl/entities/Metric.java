@@ -18,6 +18,10 @@ public class Metric {
     @Column(name = "timeZone")
     private String timezone;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "url_id")
+    private Url url;
+
     public Metric() {
     }
 
@@ -70,6 +74,10 @@ public class Metric {
 
     public String getTimezone() {
         return timezone;
+    }
+
+    public void setUrl(Url url) {
+        this.url = url;
     }
 
     public void setTimezone(String timezone) {

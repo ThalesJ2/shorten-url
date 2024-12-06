@@ -2,6 +2,7 @@ package br.com.encurtaurl.controllers;
 
 import br.com.encurtaurl.dtos.url.RequestUrlDTO;
 import br.com.encurtaurl.dtos.url.UrlProjectionDTO;
+import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.services.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,12 @@ public class UrlController {
     @GetMapping("/{tinyUrl}")
     public ResponseEntity<Void> redirect(@PathVariable String tinyUrl, HttpServletRequest request) {
         UrlProjectionDTO url = urlService.findByTinyUrl(tinyUrl,request);
-        System.out.println("1");
         return ResponseEntity.status(HttpStatus.SEE_OTHER).header("Location", url.originalUrl()).build();
+    }
+
+    @GetMapping("/metrics/{tinyUrl}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<Url> analyticsUrl(@PathVariable String tinyUrl) {
+        return ResponseEntity.ok(urlService.analytics(tinyUrl));
     }
 }

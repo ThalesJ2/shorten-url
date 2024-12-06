@@ -8,7 +8,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -38,6 +40,9 @@ public class Url {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "url" ,cascade = CascadeType.ALL)
+    private Set<Metric> metrics = new HashSet<>();
 
     public Url() {
     }
@@ -88,6 +93,13 @@ public class Url {
         return createdAt;
     }
 
+    public Set<Metric> getMetrics() {
+        return metrics;
+    }
+
+    public  void addMetric(Metric metric){
+        metrics.add(metric);
+    }
 
     public void setUser(User user) {
         this.user = user;
