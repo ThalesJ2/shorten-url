@@ -71,15 +71,12 @@ public class UrlService {
     LocalDateTime convertToUtc(LocalDateTime localDateTime, String timezone){
             ZonedDateTime zoneSystem = localDateTime.atZone(ZoneId.of(timezone));
          return zoneSystem.withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
-
     }
 
     String getIp(HttpServletRequest request){
         String ip = request.getHeader("X-Forwarded-For");
         if(ip != null)
             return ip;
-
-
         return request.getRemoteAddr();
     }
 }

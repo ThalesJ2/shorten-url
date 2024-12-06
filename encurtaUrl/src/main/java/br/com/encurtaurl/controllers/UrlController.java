@@ -27,6 +27,7 @@ public class UrlController {
     @GetMapping("/{tinyUrl}")
     public ResponseEntity<Void> redirect(@PathVariable String tinyUrl, HttpServletRequest request) {
         UrlProjectionDTO url = urlService.findByTinyUrl(tinyUrl,request);
+        System.out.println("1");
         return ResponseEntity.status(HttpStatus.SEE_OTHER).header("Location", url.originalUrl()).build();
     }
 }

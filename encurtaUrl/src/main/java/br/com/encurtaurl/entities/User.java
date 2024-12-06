@@ -1,5 +1,6 @@
 package br.com.encurtaurl.entities;
 
+import br.com.encurtaurl.dtos.user.RequestUserDTO;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -19,7 +20,7 @@ public class User {
     @JoinTable(name = "users_roles",
       joinColumns = @JoinColumn(name = "user_id" , referencedColumnName = "id"),
      inverseJoinColumns = @JoinColumn(name = "role_id" , referencedColumnName = "id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL)
     private Set<Url> urls = new HashSet<>();
@@ -31,6 +32,12 @@ public class User {
         this.id = id;
         this.email = email;
         this.password = password;
+
+    }
+
+    public User(RequestUserDTO dto){
+        email = dto.email();
+        password = dto.password();
     }
 
     public Long getId() {
@@ -59,6 +66,10 @@ public class User {
 
     public Set<Url> getUrls() {
         return urls;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
     }
 
     public void setUrls(Set<Url> urls) {

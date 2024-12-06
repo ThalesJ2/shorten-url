@@ -1,4 +1,4 @@
-package br.com.encurtaurl.dtos;
+package br.com.encurtaurl.dtos.user;
 
 import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.entities.User;
@@ -10,4 +10,5 @@ public record UserCreateUrlDTO(Long id, String email, Set<Url> urls) {
     public UserCreateUrlDTO(User user) {
         this(user.getId(), user.getEmail(), user.getUrls());
     }
+
 }
