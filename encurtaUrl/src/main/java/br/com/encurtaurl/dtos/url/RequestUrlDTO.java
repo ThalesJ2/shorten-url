@@ -1,4 +1,4 @@
-package br.com.encurtaurl.dtos;
+package br.com.encurtaurl.dtos.url;
 
 import br.com.encurtaurl.entities.Url;
 import com.fasterxml.jackson.annotation.JsonInclude;

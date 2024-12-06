@@ -1,6 +1,6 @@
 package br.com.encurtaurl.controllers;
 
-import br.com.encurtaurl.dtos.RequestUrlDTO;
+import br.com.encurtaurl.dtos.url.RequestUrlDTO;
 import br.com.encurtaurl.dtos.user.RequestUserDTO;
 import br.com.encurtaurl.dtos.user.ResponseUserDTO;
 import br.com.encurtaurl.dtos.user.UserCreateUrlDTO;

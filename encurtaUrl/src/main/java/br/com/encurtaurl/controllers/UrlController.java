@@ -1,8 +1,7 @@
 package br.com.encurtaurl.controllers;
 
-import br.com.encurtaurl.dtos.RequestUrlDTO;
-import br.com.encurtaurl.dtos.UrlProjectionDTO;
-import br.com.encurtaurl.entities.Url;
+import br.com.encurtaurl.dtos.url.RequestUrlDTO;
+import br.com.encurtaurl.dtos.url.UrlProjectionDTO;
 import br.com.encurtaurl.services.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

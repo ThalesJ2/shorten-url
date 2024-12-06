@@ -1,7 +1,7 @@
 package br.com.encurtaurl.services;
 
-import br.com.encurtaurl.dtos.RequestUrlDTO;
-import br.com.encurtaurl.dtos.UrlProjectionDTO;
+import br.com.encurtaurl.dtos.url.RequestUrlDTO;
+import br.com.encurtaurl.dtos.url.UrlProjectionDTO;
 import br.com.encurtaurl.entities.Metric;
 import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.exceptions.ResourceNotFoundException;

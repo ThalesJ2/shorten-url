@@ -1,4 +1,4 @@
-package br.com.encurtaurl.dtos;
+package br.com.encurtaurl.dtos.url;
 
 import br.com.encurtaurl.projections.UrlProjection;
 import jakarta.validation.constraints.Future;

@@ -1,4 +1,4 @@
-package br.com.encurtaurl.dtos;
+package br.com.encurtaurl.dtos.validation;
 
 public class FieldMessage {
 

@@ -1,7 +1,7 @@
 package br.com.encurtaurl.controllers.handlers;
 
-import br.com.encurtaurl.dtos.CustomError;
-import br.com.encurtaurl.dtos.ValidationError;
+import br.com.encurtaurl.dtos.validation.CustomError;
+import br.com.encurtaurl.dtos.validation.ValidationError;
 import br.com.encurtaurl.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

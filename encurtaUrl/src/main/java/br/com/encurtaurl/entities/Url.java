@@ -1,7 +1,7 @@
 package br.com.encurtaurl.entities;
 
-import br.com.encurtaurl.dtos.RequestUrlDTO;
-import br.com.encurtaurl.dtos.UrlProjectionDTO;
+import br.com.encurtaurl.dtos.url.RequestUrlDTO;
+import br.com.encurtaurl.dtos.url.UrlProjectionDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
