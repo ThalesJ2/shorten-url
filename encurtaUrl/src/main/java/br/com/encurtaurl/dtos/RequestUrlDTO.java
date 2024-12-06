@@ -17,6 +17,6 @@ public record RequestUrlDTO(@NotBlank String tinyUrl, @NotBlank String originalU
     }
 
     public RequestUrlDTO(Url url) {
-        this(url.getTinyUrl(), url.getTinyUrl(), url.getExpiration());
+        this(url.getTinyUrl(), url.getOriginalUrl(), url.getExpiration());
     }
 }

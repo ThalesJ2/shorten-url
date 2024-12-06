@@ -2,11 +2,11 @@ package br.com.encurtaurl.services;
 
 import br.com.encurtaurl.dtos.RequestUrlDTO;
 import br.com.encurtaurl.dtos.UrlProjectionDTO;
-import br.com.encurtaurl.entities.Address;
 import br.com.encurtaurl.entities.Metric;
 import br.com.encurtaurl.entities.Url;
 import br.com.encurtaurl.exceptions.ResourceNotFoundException;
 import br.com.encurtaurl.projections.UrlProjection;
+import br.com.encurtaurl.repositories.MetricRepository;
 import br.com.encurtaurl.repositories.UrlRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +28,18 @@ public class UrlService {
     @Autowired
     private IpInfoService ipInfoService;
 
+    @Autowired
+    private MetricRepository metricRepository;
 
-    @Transactional(readOnly = true)
+
+    @Transactional
     public UrlProjectionDTO findByTinyUrl(String tinyUrl,HttpServletRequest request) {
         UrlProjection projection = urlRepository.getUrlBy(tinyUrl).orElseThrow(()-> new ResourceNotFoundException("url not found"));
         String ip = getIp(request);
         Metric metric =  ipInfoService.getAddressByIp(ip);
+        long clicks = metricRepository.count()+1;
+        metric.setClick(clicks);
+        metric  = metricRepository.save(metric);
         return new UrlProjectionDTO(projection);
     }
 
@@ -49,6 +55,7 @@ public class UrlService {
             LocalDateTime converted = convertToUtc(url.getExpiration(),metric.getTimezone());
             url.setExpiration(converted);
         }
+        System.out.println();
         url = urlRepository.save(url);
         return new RequestUrlDTO(url);
     }
